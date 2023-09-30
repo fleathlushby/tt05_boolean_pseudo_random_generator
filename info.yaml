@@ -1,0 +1,101 @@
+--- 
+# TinyTapeout project information
+project:
+  wokwi_id:    0        # If using wokwi, set this to your project's ID
+
+# If using an HDL, set wokwi_id as 0 and uncomment and list your source files here. 
+# Source files must be in ./src and you must list each source file separately
+  source_files:        
+    - tt_um_ti_sbox.v
+    - sbox_ti.v
+    - SELECT_NOT_8.v
+    - MUX21I.v
+    - GF_INV_8_shared.v
+    - GF_MULS_4_shared.v
+    - GF_SQ_SCL_4.v
+    - GF_SQ_2.v
+    - GF_SCLW_2.v
+    - GF_INV_4_shared.v
+  top_module:  "tt_um_ti_sbox"      # put the name of your top module here, make it unique by prepending your github username
+
+# How many tiles your design occupies? A single tile is about 167x108 uM.
+  tiles: "8x2"    # Valid values: 1x1, 1x2, 2x2, 4x2 or 8x2
+
+# Keep a track of the submission yaml
+yaml_version: 4
+
+# As everyone will have access to all designs, try to make it easy for someone new to your design to know what
+# it does and how to operate it. This info will be automatically collected and used to make a datasheet for the chip.
+#
+# Here is a great example: https://github.com/davidsiaw/tt02-davidsiaw-stackcalc/blob/38c5647f83aad2aec675d566aa3d67b98f0aac81/info.yaml
+documentation: 
+  author:       "SEAL, CSE Department, IIT Kharagpur"
+  title:        "TI-based AES S-Box"
+  language:     "Verilog"
+  description:  "Threshold Implementation based S-Box (Substitution Box) of the AES (Advanced Encryption Standard)"
+
+# Longer description of how the project works. You can use standard markdown format.
+  how_it_works: |
+      This implementation of the S-Box follows Canright’s tower field approach and contains linear mappings to and from a $GF(2^4)$ normal base, 
+      three instances of $GF(2^4)$ multipliers, one $GF(2^4)$ inverter and one square scaler. 
+      
+      In the first phase, three shares are processed by the linear input mapping and
+      afterward fed into a multiplier and a uniform reduction to two shares $(a,b,c)\mapsto(a,b \oplus c)$ is fed into the square scaler. 
+      The output of the multiplier is partially remasked by 8-bits of randomness while the square scaler output is left as is. 
+      The result is saved in a register. In phase two the overall five shares are combined into four shares. Due to the previous remasking, this can be done uniformly as such:
+      
+      $$(x,y,a,b,c)\mapsto(x,y \oplus (r_1 \oplus r_2),a \oplus (b \oplus r_1),c \oplus r_2)$$
+
+      In the equation $x,y$ denote the square scaler output, while $a,b,c$ denote the multiplier output. Note that a register needs to hold all five shares before recombination as glitches in $a \oplus b$ might reveal secret information. 
+      After recombination, the four shares are fed into the inverter and remasked with 8-bits of randomness. A register stage preventing glitches follows. 
+      In the final stage the remasked outputs are reduced to three shares uniformly by the following function.
+      
+      $$(a,b,c,d)\mapsto(a \oplus (b \oplus r_3),c \oplus r_4,d \oplus r_3 \oplus r_4)$$
+      
+      Subsequently, these shares are fed into two multipliers. Finally, the inverse linear mapping follows. With this new construction, it is enough to have three input shares to the S-box since the multiplier block requires only three shares.
+      We need to reduce the number of shares from five to four at the end of the first phase for the inverter and from four to three at the end of the second phase for the following multipliers.
+
+      
+# Instructions on how someone could test your project, include things like what buttons do what and how to set the clock if needed
+  how_to_test:  |
+      After reset, the ena signal is set to logic '1'. This enables the device to load input values in multiple shares. After loading all the input shares, the ena signal is reset.
+      After two clock cycles, the output ready (uio_out) is set to logic '1' and the multiple output shares are generated.
+
+# A description of what the inputs do (e.g. red button, SPI CLK, SPI MOSI, etc).
+  inputs:               
+    - input bit 
+    - input bit 
+    - input bit 
+    - input bit 
+    - input bit 
+    - input bit 
+    - input bit 
+    - input bit 
+# A description of what the outputs do (e.g. status LED, SPI MISO, etc)
+  outputs:
+    - output bit 
+    - output bit 
+    - output bit 
+    - output bit
+    - output bit
+    - output bit
+    - output bit
+    - output bit
+# A description of what the bidirectional I/O pins do (e.g. I2C SDA, I2C SCL, etc)
+  bidirectional:
+    - output ready
+    - none
+    - none
+    - none
+    - none
+    - none
+    - none
+    - none
+
+# The following fields are optional
+  tag:          "test, encryption"      # comma separated list of tags: test, encryption, experiment, clock, animation, utility, industrial, pwm, fpga, alu, microprocessor, risc, riscv, sensor, signal generator, fft, filter, music, bcd, sound, serial, timer, random number generator, calculator, decoder, counter, puzzle, multiplier, game, oscillator,
+  external_hw:  ""      # Describe any external hardware needed
+  discord:      "fleathlushby"      # Your discord handle, used for communication and automatically assigning tapeout role after a submission
+  doc_link:     ""      # URL to longer form documentation, eg the README.md in your repository
+  clock_hz:     10000000       # Clock frequency in Hz (if required)
+  picture:      "sbox_block.png"      # relative path to a picture in your repository
