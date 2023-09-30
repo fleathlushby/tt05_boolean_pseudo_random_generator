@@ -1,3 +1,4 @@
+![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg)
 # Boolean function based pseudo random generator
 Design of a boolean function based pseudo random generator submitted for Tiny Tapeout-05.
 
