@@ -9,7 +9,7 @@ This implementation of a pseudo-random generator contains linear mappings to and
 - one square scaler.
 Both the input and output strings of the pseudo-random generator are split into three shares.
 
-**Principle of operation of pseudo-random generator**  
+**Principle of operation of boolean function-based pseudo-random generator**  
 The operation of the boolean function-based pseudo-random generator can be classified into the following three phases.
 
 **First phase**  
