@@ -6,7 +6,7 @@ This implementation of a pseudo-random generator contains linear mappings to and
 - one $GF(2^4)$ normal base
 - three instances of $GF(2^4)$ multipliers
 - one $GF(2^4)$ inverter and
-- one square scaler.
+- one square scaler.  
 Both the input and output strings of the pseudo-random generator are split into three shares.
 
 **Principle of operation of boolean function-based pseudo-random generator**  
