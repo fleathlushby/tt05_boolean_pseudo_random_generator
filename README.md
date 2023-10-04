@@ -1,4 +1,7 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg)
+
+![pseudorandomgenerator](https://github.com/fleathlushby/tt05_boolean_pseudo_random_generator/assets/105290202/82b0348a-03e5-4525-b8eb-a1f6d74e7db5)
+
 # Boolean function based pseudo random generator
 Design of a Boolean function based pseudo random generator for submission to the Tiny Tapeout-05 run.
 
@@ -10,7 +13,7 @@ This implementation of a pseudo random generator contains linear mappings to and
 Both the input and output strings of the pseudo random generator are split into three shares. Along with the three input shares, two more random input bytes are provided to this pseudo random generator which are used as seeds. These two random input bytes are generated externally from a randomness source.
 
 **Principle of operation of Boolean function based pseudo random generator**  
-The operation of the Boolean function based pseudo random generator can be classified into the following three phases.
+This pseudo random generator generates random values based on multiple input parameters or variables. Instead of relying solely on a single seed or input, it takes several inputs thereby introducing more control over the randomness of the generated values. For example, it might take into account factors like time, user-provided data, environmental conditions, and previous random values to produce a sequence of random numbers that are influenced by a combination of these inputs. This can result in a more tailored or context-aware randomness, which can be valuable in various applications such as simulations, games, cryptography, or data generation. The operation of the Boolean function based pseudo random generator can be classified into the following three phases.
 
 **First phase- Affine transformation**  
 In the first phase, three shares are processed by the linear input mapping and afterwards fed into a multiplier and a uniform reduction to two shares $(a,b,c)\mapsto(a,b \oplus c)$ is fed into the square scaler. 
