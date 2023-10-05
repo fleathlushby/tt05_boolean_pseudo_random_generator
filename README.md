@@ -3,7 +3,7 @@
 # Boolean function based pseudo random generator
 Design of a Boolean function based pseudo random generator for submission to the Tiny Tapeout-05 run.
 
-![pseudorandomgenerator](https://github.com/fleathlushby/tt05_boolean_pseudo_random_generator/assets/105290202/82b0348a-03e5-4525-b8eb-a1f6d74e7db5 "Schematic of the Boolean function based pseudo random generator")  
+<!-- [pseudorandomgenerator](https://github.com/fleathlushby/tt05_boolean_pseudo_random_generator/assets/105290202/82b0348a-03e5-4525-b8eb-a1f6d74e7db5 "Schematic of the Boolean function based pseudo random generator") -->  
 **Principle of operation of Boolean function based pseudo random generator** 
 This implementation of a pseudo random generator contains linear mappings to and from the following blocks:
 - one $GF(2^4)$ normal base
