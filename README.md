@@ -14,20 +14,20 @@ The input and output strings of the PRNG are split into five and three shares, r
 
 **First phase- Affine transformation**  
 In the first phase, three shares are processed by the linear input mapping and afterwards fed into a multiplier and a uniform reduction to two shares is fed into the square scaler.  
-Equation 1: $$(a,b,c)\mapsto(a,b \oplus c)$$
+$$(a,b,c)\mapsto(a,b \oplus c)$$      (1)
 The output of the multiplier is partially re-masked by 8 bits of randomness while the square scaler output is left as is. We use fresh randomness at the end of the first phase to satisfy uniformity during the combination of the square scaler’s and the multiplier’s outputs. The result is saved in a register, $P_1$ as portrayed in the block diagram.
 
 **Second phase- Finite field inversion**  
 In the second phase, the overall five shares are combined into four shares. Due to the previous remasking, this can be done uniformly as such:
       
-Equation 2: $$(x,y,a,b,c)\mapsto(x,y \oplus (r_1 \oplus r_2),a \oplus (b \oplus r_1),c \oplus r_2)$$
+$$(x,y,a,b,c)\mapsto(x,y \oplus (r_1 \oplus r_2),a \oplus (b \oplus r_1),c \oplus r_2)$$      (2)
 
 In the above equation, $x,y$ denote the square scaler output, while $a,b,c$ denote the multiplier output. Note that a register needs to hold all five shares before recombination to prevent leakage. After recombination, the four shares are fed into the inverter and re-masked with 8 bits of randomness. A register stage named $P_2$, preventing glitches, follows this inverter. 
 
 **Third phase- Finite field multiplication and inverse linear mapping**  
 In the final stage, the re-masked outputs are reduced to three shares uniformly by the following function.
       
-Equation 3: $$(a,b,c,d)\mapsto(a \oplus (b \oplus r_3),c \oplus r_4,d \oplus r_3 \oplus r_4)$$
+$$(a,b,c,d)\mapsto(a \oplus (b \oplus r_3),c \oplus r_4,d \oplus r_3 \oplus r_4)$$      (3)
       
 Subsequently, these shares are fed into two multipliers. Finally, the inverse linear mapping follows. With this construction, it is enough to have three input shares to the generator since the multiplier block requires only three shares. At this stage, we again add a randomness after the inverter to break the dependency between the inputs of the multipliers in the third phase.  
 In general, we need to reduce the number of shares from five to four at the end of the first phase as the inverter in the second phase can process four input strings. Moreover, the multipliers in the final stage is capable of processing three shares of input thus enforcing the reduction of shares from four to three at the end of the second phase.  
@@ -37,22 +37,22 @@ A working example is illustrated in the following section for a better understan
 In this example the five input bytes are assigned values of $0x62, 0x04, 0x05, 0xf8$ and $0x95$, respectively. Preliminarily, the 'ena', which is an active high input signal, is assigned a logic '0'. After the power on reset, the 'ena' is pulled up to logic '1', thus enabling the input data loading. The five input bytes are loaded sequentially into an input buffer which is a $40$ bits wide buffer. As soon as the buffer is populated, the 'ena' signal is pulled down. This marks the end of the data loading procedure. After the data loading stage, the input values are then processed by linear mapping and three shares of data are produced which are $IN1=0xa8$, $IN2=0x81$ and $IN3=0x7e$. In the first and second phase, the remaining two input values of $d=0xf8$ and $e=0x95$ are utilized for introducing randomness.
 
 The two inputs to the square scaler are $SQ_{IN1}=0x2$, which is acquired by XOR-ing the first and last $4$ bits of $IN1$ and $SQ_{IN2}=0x0$, which is acquired by XOR-ing the first and last $4$ bits of $IN2 \oplus IN3$. The inputs to the multiplier are $MUL_{IN1}, MUL_{IN2}, MUL_{IN3}, MUL_{IN4}, MUL_{IN5}$ and $MUL_{IN6}$ which are $4$ bits sliced strings of $IN1,IN2$ and $IN3$, respectively. The signals, $r_1$ and $r_2$ are $4$ bits wide, the values of which are obtained by slicing $d$. At the end of the first phase, five shares of data are produced along with the randomness, namely, $SQ_{OUT1}, SQ_{OUT2}, MUL_{OUT1}, MUL_{OUT2}, MUL_{OUT3}$ and $r$, respectively. As discussed in the previous sections, these data shares are stored in register, $P_1$ as a $48$ bits wide string. The values of the individual signals are summarized below:  
-Inputs:  
+**Inputs:**  
 $r_1 \gets 0xf$, $r_2 \gets 0x8$,  
-$MUL_{IN1} \gets 0xa$, $MUL_{IN2} \gets 0x8$, $MUL_{IN3} \gets 0x7$, $MUL_{IN4} \gets 0x8$, $MUL_{IN5} \gets 0x1$, $MUL_{IN6} \gets 0xe$.  
-Outputs:  
+$MUL_{IN1} \gets 0xa$, $MUL_{IN2} \gets 0x8$, $MUL_{IN3} \gets 0x7$, $MUL_{IN4} \gets 0x8$, $MUL_{IN5} \gets 0x1$, $MUL_{IN6} \gets 0xe$  
+**Outputs:**  
 $r \gets 0x7$,  
 $SQ_{OUT1} \gets 0x0$, $SQ_{OUT2} \gets 0x6$,  
 $MUL_{OUT1} \gets 0xf$, $MUL_{OUT2} \gets 0xe$, $MUL_{OUT3} \gets 0x8$    
 In the second phase, the corresponding input values, $INV_{IN1}, INV_{IN2}, INV_{IN3}$ and $INV_IN4$ to the inverter are $0x0, 0x1, 0xe$ and $0x0$. The subsequent outputs, $INV_{OUT2}$ and $INV_{OUT3}$ are again combined with the random values $r_3$ and $r_4$, whereas the outputs, $INV_{OUT1}$ and $INV_{OUT4}$ are left as is. The values of $r_1$ and $r_2$ are acquired by slicing $e$. At the end of this phase, there are four shares of data along with the randomness bits, $r$. The remaining input and output values of this stage are summarized below:  
-Inputs:  
+**Inputs:**  
 $r_3 \gets 0x9$, $r_4 \gets 0x5$,  
-Outputs:  
+**Outputs:**  
 $r \gets 0xc$,  
 $INV_{OUT1} \gets 0x6$, $INV_{OUT2} \gets 0xb$, $INV_{OUT3} \gets 0x2$, $INV_{OUT4} \gets 0x0$  
 In the final stage, the three inputs, $MUL_{IN1}, MUL_{IN2}$ and $MUL_{IN3}$ to each of the multipliers are obtained by exploiting Equation 3. The corresponding outputs of the two multipliers, $MUL_{OUT1}, MUL_{OUT2}, MUL_{OUT3}, MUL_{OUT4}, MUL_{OUT5}$ and $MUL_{OUT6}$ are concatenated to form three strings of eight bits each and fed to the inverse linear mapping module. Thus, we acquire the final output bytes, $OUT1, OUT2$ and $OUT3$. These values are outlined below:  
-Inputs:
+**Inputs:**
 $MUL_{IN1} \gets 0x4$, $MUL_{IN2} \gets 0x7$, $MUL_{IN3} \gets 0xc$,  
-Outputs:  
+**Outputs:**  
 $\{MUL_{OUT1},MUL_{OUT4}\} \gets 0xbb$, $\{MUL_{OUT2},MUL_{OUT5}\} \gets 0xa6$, $\{MUL_{OUT3},MUL_{OUT6}\} \gets 0x68$,  
 $OUT1 \gets 0x55$, $OUT2 \gets 0xa2$, $OUT3 \gets 0x0c$
