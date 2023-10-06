@@ -1,6 +1,6 @@
 ![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg)
 
-# Boolean function based pseudo random number generator
+# A Boolean function based pseudo random number generator
 Design of a Boolean function based pseudo random number generator (PRNG) for submission to the Tiny Tapeout-05 run.
 
 <!-- [pseudorandomgenerator](https://github.com/fleathlushby/tt05_boolean_pseudo_random_generator/assets/105290202/82b0348a-03e5-4525-b8eb-a1f6d74e7db5 "Schematic of the Boolean function based pseudo random number generator") -->  
