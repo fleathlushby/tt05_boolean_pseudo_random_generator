@@ -10,7 +10,7 @@ This implementation of a PRNG contains linear mappings to and from the following
 - three instances of $GF(2^4)$ multipliers
 - one $GF(2^4)$ inverter and
 - one square scaler.  
-The input and output strings of the PRNG are split into five and three shares, respectively. Our PRNG generates random values based on these five input parameters or variables. Instead of relying solely on a single seed or input, it takes several inputs thereby introducing more control over the randomness of the generated values. Thus, the multiple input bytes are used as seeds. These five random input bytes are generated externally from a randomness source. For example, factors like time, user-provided data, environmental conditions, and previous random values can be considered to produce a sequence of random numbers that are influenced by a combination of these inputs. This can result in a more tailored or context-aware randomness, which can be valuable in various applications such as simulations, games, cryptography, or data generation. The operation of the Boolean function based PRNG can be classified into three phases, namely, Affine transformation ($1^{st}$ phase), Finite field inversion ($2^{nd}$ phase) and Finite field multiplication and inverse linear mapping ($3^{rd}$ phase) as evident from the block diagram 'pseudorandomgenerator.png'. The working procedure of these phases are discussed in the following sections:
+The input and output strings of the PRNG are split into five and three shares, respectively. Our PRNG generates random values based on the five input bytes or variables. Instead of relying solely on a single seed or input, it takes several inputs thereby introducing more control over the randomness of the generated values. Thus, the multiple input bytes are used as seeds. These five random input bytes are generated externally from a randomness source. For example, factors like time, user-provided data, environmental conditions, and previous random values can be considered to produce a sequence of random numbers that are influenced by a combination of these inputs. This can result in a more tailored or context-aware randomness, which can be valuable in various applications such as simulations, games, cryptography, or data generation. The operation of the Boolean function based PRNG can be classified into three phases, namely, Affine transformation ($1^{st}$ phase), Finite field inversion ($2^{nd}$ phase) and Finite field multiplication and inverse linear mapping ($3^{rd}$ phase) as evident from the block diagram 'pseudorandomgenerator.png'. The working procedure of these phases are discussed in the following sections:
 
 **First phase- Affine transformation**  
 In the first phase, three shares are processed by the linear input mapping and afterwards fed into a multiplier and a uniform reduction to two shares is fed into the square scaler.  
@@ -34,25 +34,25 @@ In general, we need to reduce the number of shares from five to four at the end 
 
 A working example is illustrated in the following section for a better understanding:  
 
-In this example the five input bytes are assigned values of 0x62, 0x04, 0x05, 0xf8 and 0x95, respectively. Preliminarily, the 'ena', which is an active high input signal, is assigned a logic '0'. After the power on reset, the 'ena' is pulled up to logic '1', thus enabling the input data loading. The five input bytes are loaded sequentially into an input buffer which is a $40$ bits wide buffer. As soon as the buffer is populated, the 'ena' signal is pulled down. This marks the end of the data loading procedure. After the data loading stage, the input values are then processed by linear mapping and three shares of data are produced which are $IN1=0xa8, IN2=0x81 and IN3=0x7e$. In the first and second phase, the remaining two input values of $d=0xf8 and e=0x95$ are utilized for introducing randomness.
+In this example the five input bytes are assigned values of 0x62, 0x04, 0x05, 0xf8 and 0x95, respectively. Preliminarily, the 'ena', which is an active high input signal, is assigned a logic '0'. After the power on reset, the 'ena' is pulled up to logic '1', thus enabling the input data loading. The five input bytes are loaded sequentially into an input buffer which is a $40$ bits wide buffer. As soon as the buffer is populated, the 'ena' signal is pulled down. This marks the end of the data loading procedure. After the data loading stage, the input values are then processed by linear mapping and three shares of data are produced which are $IN1=0xa8$, $IN2=0x81$ and $IN3=0x7e$. In the first and second phase, the remaining two input values of $d=0xf8$ and $e=0x95$ are utilized for introducing randomness.
 
-The two inputs to the square scaler are $SQ_IN1=0x2$, which is acquired by XOR-ing the first and last $4$ bits of $IN1$ and $SQ_IN2=0x0$, which is acquired by XOR-ing the first and last $4$ bits of $IN2 \oplus IN3$. The inputs to the multiplier are $MUL_IN1, MUL_IN2, MUL_IN3, MUL_IN4, MUL_IN5, and MUL_IN6$ which are $4$ bits sliced strings of $a,b and c$, respectively. The signals, $r_1 and r_2$ are $4$ bits wide, the values of which are obtained by slicing $d$. At the end of the first phase, five shares of data are produced along with the randomness, namely, $SQ_OUT1, SQ_OUT2, MUL_OUT1, MUL_OUT2, MUL_OUT3 and r$, respectively. As discussed in the previous sections, these data shares are stored in register, $P_1$ as a $48$ bits wide string. The values of the individual signals are summarized below:  
-$$Inputs:  
-r_1 \gets 0xf, r_2 \gets 0x8,  
-MUL_IN1 \gets 0xa, MUL_IN2 \gets 0x8, MUL_IN3 \gets 0x7, MUL_IN4 \gets 0x8, MUL_IN5 \gets 0x1, MUL_IN6 \gets 0xe.  
+The two inputs to the square scaler are $SQ_{IN1}=0x2$, which is acquired by XOR-ing the first and last $4$ bits of $IN1$ and $SQ_{IN2}=0x0$, which is acquired by XOR-ing the first and last $4$ bits of $IN2 \oplus IN3$. The inputs to the multiplier are $MUL_{IN1}, MUL_{IN2}, MUL_{IN3}, MUL_{IN4}, MUL_{IN5}$ and $MUL_{IN6}$ which are $4$ bits sliced strings of $IN1,IN2$ and $IN3$, respectively. The signals, $r_1$ and $r_2$ are $4$ bits wide, the values of which are obtained by slicing $d$. At the end of the first phase, five shares of data are produced along with the randomness, namely, $SQ_{OUT1}, SQ_{OUT2}, MUL_{OUT1}, MUL_{OUT2}, MUL_{OUT3}$ and $r$, respectively. As discussed in the previous sections, these data shares are stored in register, $P_1$ as a $48$ bits wide string. The values of the individual signals are summarized below:  
+Inputs:  
+$$r_1 \gets 0xf$$, $$r_2 \gets 0x8$$,  
+$$MUL_{IN1} \gets 0xa$$, $$MUL_{IN2} \gets 0x8$$, $$MUL_{IN3} \gets 0x7$$, $$MUL_{IN4} \gets 0x8$$, $$MUL_{IN5} \gets 0x1$$, $$MUL_{IN6} \gets 0xe$$.  
 Outputs:  
-r \gets 0x7,  
-SQ_OUT1 \gets 0x0, SQ_OUT2 \gets 0x6,  
-MUL_OUT1 \gets 0xf, MUL_OUT2 \gets 0xe, MUL_OUT3 \gets 0x8.$$    
-In the second phase, the corresponding input values, $INV_IN1, INV_IN2, INV_IN3 and INV_IN4$ to the inverter are $0x0, 0x1, 0xe and 0x0$. The subsequent outputs, $INV_OUT2 and INV_OUT3$ are again combined with the random values $r_3 and r_4$, whereas the outputs, $INV_OUT1 and INV_OUT4$ are left as is. The values of $r_1 and r_2$ are acquired by slicing $e$. At the end of this phase, there are four shares of data along with the randomness bits, $r$. The remaining input and output values of this stage are summarized below:  
-$$Inputs:  
-r_3 \gets 0x9, r_4 \gets 0x5,  
+$$r \gets 0x7$$,  
+$$SQ_{OUT1} \gets 0x0$$, $$SQ_{OUT2} \gets 0x6$$,  
+$$MUL_{OUT1} \gets 0xf$$, $$MUL_{OUT2} \gets 0xe$$, $$MUL_{OUT3} \gets 0x8$$    
+In the second phase, the corresponding input values, $INV_{IN1}, INV_{IN2}, INV_{IN3}$ and $INV_IN4$ to the inverter are $0x0, 0x1, 0xe$ and $0x0$. The subsequent outputs, $INV_{OUT2}$ and $INV_{OUT3}$ are again combined with the random values $r_3$ and $r_4$, whereas the outputs, $INV_{OUT1}$ and $INV_{OUT4}$ are left as is. The values of $r_1$ and $r_2$ are acquired by slicing $e$. At the end of this phase, there are four shares of data along with the randomness bits, $r$. The remaining input and output values of this stage are summarized below:  
+Inputs:  
+$$r_3 \gets 0x9$$, $$r_4 \gets 0x5$$,  
 Outputs:  
-r \gets 0xc,  
-INV_OUT1 \gets 0x6, INV_OUT2 \gets 0xb, INV_OUT3 \gets 0x2, INV_OUT4 \gets 0x0$$  
-In the final stage, the three inputs, $MUL_IN1, MUL_IN2 and MUL_IN3$ to each of the multipliers are obtained by exploiting Equation 3. The corresponding outputs of the two multipliers, $MUL_OUT1, MUL_OUT2, MUL_OUT3, MUL_OUT4, MUL_OUT5 and MUL_OUT6$ are concatenated to form three strings of eight bits each and fed to the inverse linear mapping module. Thus, we acquire the final output bytes, $OUT1, OUT2 and OUT3$. These values are outlined below:  
-$$Inputs:
-MUL_IN1 \gets 0x4, MUL_IN2 \gets 0x7, MUL_IN3 \gets 0xc,  
+$$r \gets 0xc$$,  
+$$INV_{OUT1} \gets 0x6$$, $$INV_{OUT2} \gets 0xb$$, $$INV_{OUT3} \gets 0x2$$, $$INV_{OUT4} \gets 0x0$$  
+In the final stage, the three inputs, $MUL_{IN1}, MUL_{IN2}$ and $MUL_{IN3}$ to each of the multipliers are obtained by exploiting Equation 3. The corresponding outputs of the two multipliers, $MUL_{OUT1}, MUL_{OUT2}, MUL_{OUT3}, MUL_{OUT4}, MUL_{OUT5}$ and $MUL_{OUT6}$ are concatenated to form three strings of eight bits each and fed to the inverse linear mapping module. Thus, we acquire the final output bytes, $OUT1, OUT2$ and $OUT3$. These values are outlined below:  
+Inputs:
+$$MUL_{IN1} \gets 0x4$$, $$MUL_{IN2} \gets 0x7$$, $$MUL_{IN3} \gets 0xc$$,  
 Outputs:  
-{MUL_OUT1,MUL_OUT4} \gets 0xbb, {MUL_OUT2,MUL_OUT5} \gets 0xa6, {MUL_OUT3,MUL_OUT6} \gets 0x68,  
-OUT1 \gets 0x55, OUT2 \gets 0xa2, OUT3 \gets 0x0c$$
+$$\{MUL_{OUT1},MUL_{OUT4}\} \gets 0xbb$$, $$\{MUL_{OUT2},MUL_{OUT5}\} \gets 0xa6$$, $$\{MUL_{OUT3},MUL_{OUT6}\} \gets 0x68$$,  
+$$OUT1 \gets 0x55$$, $$OUT2 \gets 0xa2$$, $$OUT3 \gets 0x0c$$
