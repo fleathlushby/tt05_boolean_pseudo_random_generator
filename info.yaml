@@ -63,7 +63,20 @@ documentation:
             
       Subsequently, these shares are fed into two multipliers. Finally, the inverse linear mapping follows. With this construction, it is enough to have three input shares to the generator since the multiplier block requires only three shares. At this stage, we again add a randomness after the inverter to break the dependency between the inputs of the multipliers in the third phase.  
       In general, we need to reduce the number of shares from five to four at the end of the first phase as the inverter in the second phase can process four input strings. Moreover, the multipliers in the final stage is capable of processing three shares of input thus enforcing the reduction of shares from four to three at the end of the second phase.  
-    
+      A working example is presented below for a better understanding:  
+      
+      In this example, the five input bytes are assigned values of $0x62, 0x04, 0x05, 0xf8$ and $0x95$, respectively. Preliminarily, the 'ena', an active high input signal is assigned a logic '0'. After the power on reset, the 'ena' is pulled up to logic '1', thus enabling the input data loading. The five input bytes are loaded sequentially into an input buffer which is $40$ bits wide. As soon as the buffer is populated, the 'ena' signal is set to active low. This marks the end of the data loading procedure. After the data loading stage, the input values are then processed by linear mapping and three shares of data are produced which are $IN1=0xa8$, $IN2=0x81$ and $IN3=0x7e$. In the first and second phase, the remaining two input values of $R_0=0xf8$ and $R_1=0x95$ are utilized for introducing randomness.
+      
+      The two inputs to the square scaler are $SQ_{IN1}=0x2$ and $SQ_{IN2}=0x0$. Our design acquires $SQ_{IN1}$ by XOR-ing the first and last $4$ bits of $IN1$ , whereas $SQ_{IN2}$ is acquired by XOR-ing the first and last $4$ bits of $IN2 \oplus IN3$. The strings $IN1\[7:4\],IN2\[7:4\],IN3\[7:4\],IN1\[3:0\],IN2\[3:0\]$, and $IN3\[3:0\]$ are given as inputs to the multiplier and represented by $MUL_{IN1}, MUL_{IN2}, MUL_{IN3}, MUL_{IN4}, MUL_{IN5}$ and $MUL_{IN6}$, respectively. The signals, $r_1$ and $r_2$ are $4$ bits wide, the values of which are obtained by slicing $R_0$. At the end of the first phase, five shares of data are produced along with the randomness, namely, $SQ_{OUT1}, SQ_{OUT2}, MUL_{OUT1}, MUL_{OUT2}, MUL_{OUT3}$ and $r$, respectively. The values of the individual signals are summarized below:  
+      **Inputs:**  
+      $r_1 \gets 0xf$, $r_2 \gets 0x8$,  
+      $MUL_{IN1} \gets 0xa$, $MUL_{IN2} \gets 0x8$, $MUL_{IN3} \gets 0x7$, $MUL_{IN4} \gets 0x8$, $MUL_{IN5} \gets 0x1$, $MUL_{IN6} \gets 0xe$  
+      **Outputs:**  
+      $r \gets 0x7$,  
+      $SQ_{OUT1} \gets 0x0$, $SQ_{OUT2} \gets 0x6$,  
+      $MUL_{OUT1} \gets 0xf$, $MUL_{OUT2} \gets 0xe$, $MUL_{OUT3} \gets 0x8$  
+      
+      
 
 
 
