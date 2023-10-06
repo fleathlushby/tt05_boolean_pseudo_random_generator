@@ -36,8 +36,15 @@ documentation:
 
 # Longer description of how the project works. You can use standard markdown format.
   how_it_works: |
-      ratglkgl
-
+      **Principle of operation of Boolean function based pseudo random number generator (PRNG)**   
+      This implementation of a PRNG contains linear mappings to and from the following blocks:
+      - one $GF(2^4)$ normal base,
+      - three instances of $GF(2^4)$ multipliers,
+      - one $GF(2^4)$ inverter, and
+      - one square scaler.  
+      The input and output strings of the PRNG are split into five and three shares, respectively. Our PRNG generates random values based on the five input bytes or variables. Instead of relying solely on a single seed or input, it takes several inputs thereby introducing more control over the randomness of the generated values. Thus, the multiple input bytes are used as seeds. The seeds are generated from external factors like time, user-provided data, and environmental conditions. Additionally, previous random values produced by our PRNG design can also be considered as a valid seed. This results in a more tailored or context-aware randomness, which finds its application in simulations, games, cryptography, or data generation. The operation of the Boolean function based PRNG can be classified into three phases, namely, Affine transformation ($1^{st}$ phase), Finite field inversion ($2^{nd}$ phase) and the combination of Finite field multiplication and inverse linear mapping ($3^{rd}$ phase) as evident from the block diagram 'pseudorandomgenerator.png'. The working procedure of these phases are discussed as follows:
+      
+      
 
 
       
