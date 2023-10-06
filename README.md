@@ -45,14 +45,14 @@ $r \gets 0x7$,
 $SQ_{OUT1} \gets 0x0$, $SQ_{OUT2} \gets 0x6$,  
 $MUL_{OUT1} \gets 0xf$, $MUL_{OUT2} \gets 0xe$, $MUL_{OUT3} \gets 0x8$  
 
-In the second phase, the corresponding input values, $INV_{IN1}, INV_{IN2}, INV_{IN3}$ and $INV_IN4$ to the inverter are $0x0, 0x1, 0xe$ and $0x0$. The subsequent outputs, $INV_{OUT2}$ and $INV_{OUT3}$ are again combined with the random values $r_3$ and $r_4$, whereas the outputs, $INV_{OUT1}$ and $INV_{OUT4}$ are left as is. The values of $r_3$ and $r_4$ are acquired by slicing $R_1$. At the end of this phase, there are four shares of data along with the randomness bits, $r$. The remaining input and output values of this stage are summarized below:  
+In the second phase, the corresponding input values, $INV_{IN1}, INV_{IN2}, INV_{IN3}$ and $INV_{IN4}$ to the inverter are $0x0, 0x1, 0xe$ and $0x0$. The subsequent outputs, $INV_{OUT2}$ and $INV_{OUT3}$ are again combined with the random values $r_3$ and $r_4$, whereas the outputs, $INV_{OUT1}$ and $INV_{OUT4}$ are left as is. The values of $r_3$ and $r_4$ are acquired by slicing $R_1$. At the end of this phase, there are four shares of data along with the randomness bits, $r$. The remaining input and output values of this stage are summarized below:  
 **Inputs:**  
 $r_3 \gets 0x9$, $r_4 \gets 0x5$,  
 **Outputs:**  
 $r \gets 0xc$,  
 $INV_{OUT1} \gets 0x6$, $INV_{OUT2} \gets 0xb$, $INV_{OUT3} \gets 0x2$, $INV_{OUT4} \gets 0x0$  
 
-In the final stage, the three inputs, $MUL_{IN1}, MUL_{IN2}$ and $MUL_{IN3}$ to each of the multipliers are obtained by exploiting Equation 3. The corresponding outputs of the two multipliers, $MUL_{OUT1}, MUL_{OUT2}, MUL_{OUT3}, MUL_{OUT4}, MUL_{OUT5}$ and $MUL_{OUT6}$ are concatenated to form three strings of eight bits each and fed to the inverse linear mapping module. Thus, we acquire the final output bytes, $OUT1, OUT2$ and $OUT3$. These values are outlined below:  
+In the final stage, $MUL_{IN1}, MUL_{IN2}$ and $MUL_{IN3}$ are given as inputs to each of the multipliers (see Equation 3). The corresponding outputs of the two multipliers, $MUL_{OUT1}, MUL_{OUT2}, MUL_{OUT3}, MUL_{OUT4}, MUL_{OUT5}$ and $MUL_{OUT6}$ are concatenated to form three strings of eight bits each and fed to the inverse linear mapping module. Thus, we acquire the final output bytes, $OUT1, OUT2$ and $OUT3$. These values are outlined below:  
 **Inputs:**  
 $MUL_{IN1} \gets 0x4$, $MUL_{IN2} \gets 0x7$, $MUL_{IN3} \gets 0xc$,  
 **Outputs:**  
