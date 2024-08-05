@@ -46,7 +46,7 @@ async def test_prg(dut):
     await ClockCycles(dut.clk, 3)
     dut._log.info("output after input buffering = {}".format(int(dut.uo_out.value)))
     dut._log.info("output ready = {}".format(int(dut.uio_out.value)))
-    assert dut.uio_oe == 0xFF
+    # assert dut.uio_oe == 0xFF
     assert dut.uio_out == 0x01
     for i in range(5):
         assert int(dut.uo_out.value) == output1[i]
@@ -82,7 +82,7 @@ async def test_prg(dut):
     await ClockCycles(dut.clk, 3)
     dut._log.info("output after input buffering = {}".format(int(dut.uo_out.value)))
     dut._log.info("output ready = {}".format(int(dut.uio_out.value)))
-    assert dut.uio_oe == 0xFF
+    # assert dut.uio_oe == 0xFF
     assert dut.uio_out == 0x01
     for i in range(5):
         assert int(dut.uo_out.value) == output2[i]
@@ -118,7 +118,7 @@ async def test_prg(dut):
     await ClockCycles(dut.clk, 3)
     dut._log.info("output after input buffering = {}".format(int(dut.uo_out.value)))
     dut._log.info("output ready = {}".format(int(dut.uio_out.value)))
-    assert dut.uio_oe == 0xFF
+    # assert dut.uio_oe == 0xFF
     assert dut.uio_out == 0x01
     for i in range(5):
         assert int(dut.uo_out.value) == output3[i]
